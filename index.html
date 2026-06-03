@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Open When… 💌 Eszternek</title>
+<title>Nyisd ki, ha… 💌 Eszternek</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Sacramento&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
 <style>
@@ -357,7 +357,7 @@ body {
     <button class="toggle-btn active" data-lang="hu" onclick="setLang('hu')">🇭🇺 HU</button>
     <button class="toggle-btn"        data-lang="en" onclick="setLang('en')">🇬🇧 EN</button>
   </div>
-  <button class="toggle-icon-btn" id="themeBtn" onclick="toggleTheme()" title="Téma váltás">🌙</button>
+  <button class="toggle-icon-btn" id="themeBtn" onclick="toggleTheme()" title="Téma váltása">🌙</button>
 </div>
 
 <!-- Hero -->
@@ -375,12 +375,12 @@ body {
 /* ── i18n strings ─────────────────────────────────── */
 const i18n = {
   hu: {
-    heroSub:   'egy kis meglepetés neked, 💌',
+    heroSub:   'egy apró meglepetés neked 💌',
     heroTitle: 'Nyisd ki, ha…<br><span>Eszternek</span>',
     heroHint:  'Nyisd ki a leveleket',
-    hintMouse: ' – húzd rá az egered 🖱',
+    hintMouse: ' – húzd fölé az egeret 🖱',
     hintTouch: ' – koppints rájuk 👆',
-    footer:    'szeretlek ✦ mindig ✦ minden pillanatban 🌸',
+    footer:    'Szeretlek ✦ mindig ✦ minden pillanatban 🌸',
   },
   en: {
     heroSub:   'a little surprise for you, 💌',
@@ -397,68 +397,68 @@ const letters = [
   {
     emoji:'😢', seal:'💙', topEmoji:'🌧️',
     front:{ hu:'Nyisd ki, ha<br><em>szomorú vagy</em>',            en:'Open when<br>you\'re <em>sad</em>' },
-    text: { hu:'Tudom, hogy most nehéz. De minden vihar elvonul – és te az egyik legerősebb ember, akit ismerek. Engedd el a könnyeket, aztán emlékezz: én itt vagyok, mindig. Hamarosan süt megint a nap. 🌤️',
-            en:'I know it\'s hard right now. But every storm passes – and you are one of the strongest people I know. Let the tears fall, then remember: I\'m here, always. The sun will shine again soon. 🌤️' },
-    sign: { hu:'– aki szeret téged', en:'– the one who loves you' },
+    text: { hu:'Tudom, hogy most nehéz. De minden vihar egyszer elvonul, és te vagy az egyik legerősebb ember, akit ismerek. Engedd ki a könnyeidet, aztán emlékezz: én itt vagyok veled, mindig. Bízz bennem, minden rendben lesz. 🌤️',
+            en:'I know it\'s hard right now. But every storm passes – and you are one of the strongest people I know. Let the tears fall, then remember: I\'m here, always. Trust me, everything is going to be fine. 🌤️' },
+    sign: { hu:'– aki nagyon szeret téged', en:'– the one who loves you' },
   },
   {
     emoji:'😊', seal:'🌟', topEmoji:'✨',
     front:{ hu:'Nyisd ki, ha<br><em>boldog vagy</em>',             en:'Open when<br>you\'re <em>happy</em>' },
-    text: { hu:'Ez az. Ez az a ragyogás, ami miatt annyira szeretlek. Tartsd meg ezt az érzést – fotózd le, írd le, érezd teli tüdővel. Te megérdemled az összes örömet a világon. 🎉',
+    text: { hu:'Ez az a ragyogás, amiért annyira szeretlek. Őrizd meg ezt az érzést – írd le, fotózd le, éld meg teljes szívvel. Te tényleg megérdemled a világ összes örömét. 🎉',
             en:'This is it. This is the glow that makes me love you so much. Hold on to this feeling – photograph it, write it down, breathe it in fully. You deserve every joy in the world. 🎉' },
-    sign: { hu:'– a te rajongód', en:'– your biggest fan' },
+    sign: { hu:'– a legnagyobb rajongód', en:'– your biggest fan' },
   },
   {
     emoji:'🥺', seal:'💗', topEmoji:'🌙',
     front:{ hu:'Nyisd ki, ha<br><em>hiányzom neked</em>',          en:'Open when<br>you <em>miss me</em>' },
     // FIX: "Én is hiányzol" → "Nekem is hiányzol" (az "Én is" + "hiányzol" grammatikailag összeférhetetlen volt)
-    text: { hu:'Nekem is hiányzol. Nagyon. Zárd be a szemed és érezd: valahol éppen most gondolok rád. A távolság csak szám – a szívem mindig melletted van. Hamarosan ott leszek. ✈️',
+    text: { hu:'Nekem is nagyon hiányzol. Zárd be a szemed, és érezd: valahol épp most is rád gondolok. A távolság csak egy szám – a szívem mindig melletted van. Hamarosan ott leszek. ✈️',
             en:'I miss you too. So much. Close your eyes and feel it: somewhere, right now, I\'m thinking of you. Distance is just a number – my heart is always by your side. I\'ll be there soon. ✈️' },
     sign: { hu:'– a te embered', en:'– your person' },
   },
   {
     emoji:'🤗', seal:'🩷', topEmoji:'🫶',
     front:{ hu:'Nyisd ki, ha<br><em>ölelésre vágysz</em>',         en:'Open when<br>you need <em>a hug</em>' },
-    text: { hu:'Képzeld el, hogy most átölellek. Szorosan. Beburkollak a karomba és nem engedlek el, amíg el nem múlik. Addig is: takaród + meleg tea + kedvenc sorozat. Megölellek hamarosan. 🧸',
+    text: { hu:'Képzeld el, hogy most átölellek. Szorosan. Köréd fonom a karom, és nem engedlek el, amíg jobb nem lesz. Addig is: takaró, meleg tea és a kedvenc sorozatod. Hamarosan élőben is megölellek. 🧸',
             en:'Imagine I\'m hugging you right now. Tight. I\'m wrapping you in my arms and not letting go until it passes. Until then: blanket + warm tea + your favourite show. I\'ll hug you for real soon. 🧸' },
-    sign: { hu:'– aki ölel messziről', en:'– hugging you from afar' },
+    sign: { hu:'– aki messziről ölel', en:'– hugging you from afar' },
   },
   {
     emoji:'😴', seal:'🌛', topEmoji:'⭐',
     front:{ hu:'Nyisd ki, ha<br><em>nem tudsz aludni</em>',        en:'Open when<br>you <em>can\'t sleep</em>' },
-    text: { hu:'Lélegezz lassan. Be… ki… Gondolj arra a napra, amikor először nevettünk együtt annyit, hogy fájt a hasunk. Mosolyogj rá halkan – és hagyd, hogy az álom csendesen elvigyen. 💤',
+    text: { hu:'Lélegezz lassan. Be… ki… Képzeld azt, hogy szorosan összebújunk és a füledbe szuszogok. Gondolj arra a napra, amikor először nevettünk annyit, hogy fájt a hasunk. Mosolyogj rá halkan, és hagyd, hogy az álom szépen elringasson. 💤',
             en:'Breathe slowly. In… out… Think of that day when we laughed together so hard our stomachs hurt for the first time. Smile softly at that memory – and let sleep carry you away gently. 💤' },
     sign: { hu:'– aki szép álmokat küld', en:'– sending you sweet dreams' },
   },
   {
     emoji:'💪', seal:'🔥', topEmoji:'🚀',
     front:{ hu:'Nyisd ki, ha<br><em>motivációra van szükséged</em>', en:'Open when<br>you need <em>motivation</em>' },
-    text: { hu:'Te TUDOD csinálni. Nem csak úgy mondom – láttam, ahogy nehézségeken keresztül is mentél előre. Ez sem lesz másképp. Állj fel, rázd meg magad, és tedd meg az első lépést. Büszke vagyok rád. 🏆',
+    text: { hu:'Képes vagy rá. Nem csak beszélek: láttam, ahogy megküzdesz a nehézségekkel. Ezen is át fogsz jutni. Állj fel, rázd meg magad, és tedd meg az első lépést. Büszke vagyok rád. 🏆',
             en:'You CAN do this. I\'m not just saying it – I\'ve watched you push through hard things before. This will be no different. Stand up, shake it off, and take that first step. I am so proud of you. 🏆' },
     sign: { hu:'– a te szurkolód', en:'– your cheerleader' },
   },
   {
     emoji:'😤', seal:'🕊️', topEmoji:'🌬️',
     front:{ hu:'Nyisd ki, ha<br><em>mérges vagy</em>',             en:'Open when<br>you\'re <em>angry</em>' },
-    text: { hu:'Oké. Mérges vagy. Ez teljesen rendben van. Érezd – aztán mélyen lélegezz. Mielőtt cselekszel, kérdezd meg magadtól: egy hét múlva is számít ez? Ha igen, szólj nekem – ha nem, engedj el. ❤️',
+    text: { hu:'Rendben, most dühös vagy. Ez teljesen emberi. Érezd, hogy átjár, aztán vegyél egy mély levegőt. Mielőtt reagálsz, kérdezd meg magadtól: egy hét múlva is számítani fog? Ha igen, beszéljük meg. Ha nem, engedd el. ❤️',
             en:'Okay. You\'re angry. That\'s completely valid. Feel it – then breathe deeply. Before you act, ask yourself: will this matter in a week? If yes, let\'s talk – if not, let it go. ❤️' },
-    sign: { hu:'– aki szeret dühösen is', en:'– who loves you even angry' },
+    sign: { hu:'– aki veled van, még dühösen is', en:'– who loves you even angry' },
   },
   {
     emoji:'😑', seal:'🎨', topEmoji:'🌈',
     front:{ hu:'Nyisd ki, ha<br><em>unatkozol</em>',               en:'Open when<br>you\'re <em>bored</em>' },
     // FIX: "a jövőbeli önödnek" → "jövőbeli önmagadnak" (az "önöd" magázó/többes szám volt)
-    text: { hu:'Ötletek! ① Rajzolj valamit, ami ma eszedbe jutott. ② Írj egy mini-levelet jövőbeli önmagadnak. ③ Hívj fel – garantálom, kalandba esünk. A világ tele van meglepetéssel. 🗺️',
+    text: { hu:'Ötletek: ① Rajzolj valamit, ami ma eszedbe jutott. ② Írj egy rövid levelet a jövőbeli önmagadnak. <br> ③ Hívj fel, hátha ellérsz és el tudom mondani, mennnnnnnnnnyire szeretlek❤️ 🗺️',
             en:'Ideas! ① Draw something that crossed your mind today. ② Write a tiny letter to your future self. ③ Call me – I guarantee we\'ll end up on an adventure. The world is full of surprises. 🗺️' },
     sign: { hu:'– a tervező', en:'– the planner' },
   },
   {
     emoji:'🌸', seal:'💫', topEmoji:'👑',
-    front:{ hu:'Nyisd ki, ha<br><em>szépnek érzed magad</em>',     en:'Open when<br>you feel <em>beautiful</em>' },
+    front:{ hu:'Nyisd ki, ha<br><em>gyönyörűnek érzed magad</em>, és akkor is ha épp nem - hiszen te mindig gyönyörű vagy!',     en:'Open when<br>you feel <em>beautiful</em>' },
     // FIX: "elbűvölök tőled" → "elbűvölsz engem" (az "elbűvöl" tárgyas ige, a korábbi forma fordítva állt)
-    text: { hu:'IGEN. Igen, igen, igen. Mert mindig az vagy – nemcsak ma. A szemed, a mosolyod, az ahogy gondolkodsz… te minden nap elbűvölsz engem. Tartsd meg ezt az érzést örökre. 🌺',
-            en:'YES. Yes, yes, yes. Because you always are – not just today. Your eyes, your smile, the way you think… I am enchanted by you every single day. Hold on to this feeling forever. 🌺' },
-    sign: { hu:'– aki lát téged', en:'– who truly sees you' },
+    text: { hu:'IGEN! Igen, igen, igen. Mert ez nem csak ma igaz rád. A szemed, a mosolyod, Te Bombanőőő! Minden nap elbűvölsz. Őrizd meg ezt az érzést. 🌺',
+            en:'YES! Yes, yes, yes. Because you always are – not just today. Your eyes, your smile, I love it... I am enchanted by you every single day. Hold on to this feeling forever. 🌺' },
+    sign: { hu:'– aki tényleg lát téged', en:'– who truly sees you' },
   },
   {
     emoji:'🌟', seal:'✉️', topEmoji:'😄',
@@ -466,7 +466,7 @@ const letters = [
     // FIX: az eredeti lift/lépcső vicc értelmetlen volt magyarul. Helyette egy valódi magyar szójáték:
     // "Mit mond a bal szem a jobb szemnek? »Köztünk szólva, te is látod ezt?«"
     // — a "köztünk szólva" idiómában az "köztünk" szó szó szerint is igaz (az orr köztük van).
-    text: { hu:'Mit mond a bal szem a jobb szemnek? „Köztünk szólva, te is látod ezt?" 😄 Oké, oké – de komolyan: te a legcukiabb arckifejezéssel olvasod ezt, és én imádom ezért. Ott a mosoly! 🎊',
+    text: { hu:'Mit mond a bal szem a jobb szemnek? „Köztünk szólva, te is látod ezt?” 😄 Jó, jó – de komolyan: olyan cuki arccal olvasod ezt, hogy egyszerűen nem lehet nem mosolyogni rajtad. Na, meg is van a mosoly! 🎊',
             en:'Why can\'t you trust stairs? Because they\'re always up to something. 😄 Okay, okay – but seriously: you have the cutest expression right now reading this, and I love you for it. There\'s the smile! 🎊' },
     sign: { hu:'– a rosszvicc-mestere', en:'– the bad joke master' },
   },
@@ -474,15 +474,15 @@ const letters = [
     emoji:'💭', seal:'🦋', topEmoji:'🧭',
     front:{ hu:'Nyisd ki, ha<br><em>elveszettnek érzed magad</em>', en:'Open when<br>you feel <em>lost</em>' },
     // FIX: "növekedésben vagy" → "épp fejlődsz" (a korábbi szerkezet magyartalan volt)
-    text: { hu:'Az elveszettség sokszor éppen azt jelzi, hogy épp fejlődsz. Nem kell mindent tudni. Lélegezz, bízz magadban – és ha kell, szólj nekem. Együtt megtaláljuk az utat. 🌿',
+    text: { hu:'Az elveszettség sokszor csak azt jelzi, hogy éppen fejlődsz. Nem kell most mindent tudnod. Lélegezz, bízz magadban – és ha kell, szólj nekem. Együtt megtaláljuk az utat. 🌿',
             en:'Feeling lost often means you\'re growing. You don\'t need to have it all figured out. Breathe, trust yourself – and if you need to, reach out. We\'ll find the way together. 🌿' },
     sign: { hu:'– aki melletted megy', en:'– walking beside you' },
   },
   {
     emoji:'🎂', seal:'🎁', topEmoji:'🥳',
     // FIX: "a születésnapodon van" → "ma a születésnapod van" (az ige alanya hiányzott)
-    front:{ hu:'Nyisd ki, ha<br><em>ma a születésnapod van</em>',  en:'Open when<br>it\'s your <em>birthday</em>' },
-    text: { hu:'Boldog születésnapot, gyönyörű! 🎉 Ma minden rólad szól – minden falat torta, minden gyertya, minden kívánság. Kívánom, hogy ez az év hozzon neked mindent, amit megérdemelsz. Én már tudom: rengeteg. 🎈',
+    front:{ hu:'Nyisd ki, ha<br><em>ma van a születésnapod</em>',  en:'Open when<br>it\'s your <em>birthday</em>' },
+    text: { hu:'Boldog születésnapot, gyönyörű! 🎉 Ma minden rólad szól – a torta, a gyertyák, a kívánságok, minden. Kívánom neked az összes jót ezen a világon. Mert megérdemled. Szeretlek picim.❤️ 🎈',
             en:'Happy birthday, beautiful! 🎉 Today is all about you – every bite of cake, every candle, every wish. I hope this year brings you everything you deserve. I already know: so, so much. 🎈' },
     sign: { hu:'– a te legnagyobb rajongód', en:'– your biggest fan, always' },
   },
