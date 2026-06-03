@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light" data-lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open When… 💌 Eszternek</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Sacramento&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Theme variables ──────────────────────────────── */
+:root {
+  --cream:      #FDF6EE;
+  --paper:      #FFF9F3;
+  --blush:      #F2C4CE;
+  --rose:       #D4899A;
+  --deep:       #9E5F6E;
+  --gold:       #C9A96E;
+  --ink:        #4A2C35;
+  --muted:      #8C6570;
+  --card-shadow: rgba(212,137,154,0.18);
+  --card-back-shadow: rgba(212,137,154,0.22);
+  --line-color:  rgba(242,196,206,0.25);
+  --toggle-bg:   rgba(212,137,154,0.15);
+  --toggle-border: rgba(201,169,110,0.50);
+  --transition: .45s cubic-bezier(.4,0,.2,1);
+}
+[data-theme="dark"] {
+  --cream:      #180e13;
+  --paper:      #22131a;
+  --blush:      #5a2d3a;
+  --rose:       #c4788a;
+  --deep:       #e8a0b0;
+  --gold:       #d4a96e;
+  --ink:        #f5e6ea;
+  --muted:      #c4a0aa;
+  --card-shadow: rgba(0,0,0,0.40);
+  --card-back-shadow: rgba(0,0,0,0.50);
+  --line-color:  rgba(90,45,58,0.40);
+  --toggle-bg:   rgba(90,45,58,0.40);
+  --toggle-border: rgba(212,169,110,0.35);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background-color: var(--cream);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background-color var(--transition), color var(--transition);
+}
+
+/* ── Control bar ──────────────────────────────────── */
+.controls {
+  position: fixed;
+  top: 1.1rem; right: 1.2rem;
+  z-index: 100;
+  display: flex;
+  gap: .6rem;
+  align-items: center;
+}
+.toggle-pill {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: var(--toggle-bg);
+  border: 1.5px solid var(--toggle-border);
+  border-radius: 100px;
+  padding: .22rem .28rem;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: background var(--transition), border-color var(--transition);
+}
+.toggle-btn {
+  border: none;
+  background: transparent;
+  border-radius: 100px;
+  cursor: pointer;
+  font-size: .82rem;
+  padding: .32rem .62rem;
+  color: var(--muted);
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  letter-spacing: .04em;
+  transition: background .25s ease, color .25s ease, transform .2s ease;
+  line-height: 1;
+  white-space: nowrap;
+}
+.toggle-btn:hover { transform: scale(1.06); }
+.toggle-btn.active {
+  background: linear-gradient(135deg, var(--rose), var(--deep));
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(158,95,110,0.35);
+}
+.toggle-icon-btn {
+  border: none;
+  background: var(--toggle-bg);
+  border: 1.5px solid var(--toggle-border);
+  border-radius: 100px;
+  cursor: pointer;
+  font-size: 1rem;
+  width: 2.2rem; height: 2.2rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: background var(--transition), border-color var(--transition), transform .2s ease;
+  backdrop-filter: blur(12px);
+}
+.toggle-icon-btn:hover { transform: scale(1.1) rotate(15deg); }
+
+/* ── Petals ───────────────────────────────────────── */
+.petals-bg {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 0; overflow: hidden;
+}
+.petal {
+  position: absolute; top: -60px;
+  font-size: 1.1rem; opacity: 0;
+  animation: fall linear infinite;
+}
+@keyframes fall {
+  0%   { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0; }
+  5%   { opacity: .7; }
+  90%  { opacity: .5; }
+  100% { transform: translateY(110vh) rotate(720deg) translateX(60px); opacity: 0; }
+}
+
+/* ── Hero ─────────────────────────────────────────── */
+.hero {
+  position: relative; z-index: 1;
+  text-align: center;
+  padding: 5.5rem 1rem 3rem;
+}
+.hero-sub {
+  font-family: 'Sacramento', cursive;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  color: var(--rose);
+  letter-spacing: .04em;
+  margin-bottom: .4rem;
+  animation: fadeDown .9s ease both;
+  transition: color var(--transition);
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(2.6rem, 8vw, 5.2rem);
+  color: var(--ink);
+  line-height: 1.1;
+  animation: fadeDown .9s .15s ease both;
+  transition: color var(--transition);
+}
+.hero-title span {
+  font-family: 'Sacramento', cursive;
+  font-size: 1.15em;
+  color: var(--deep);
+  font-style: normal;
+  transition: color var(--transition);
+}
+.hero-divider {
+  margin: 1.6rem auto;
+  width: 120px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  animation: fadeDown .9s .3s ease both;
+  transition: background var(--transition);
+}
+.hero-hint {
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--muted);
+  letter-spacing: .05em;
+  animation: fadeDown .9s .4s ease both;
+  transition: color var(--transition);
+}
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Grid ─────────────────────────────────────────── */
+.grid {
+  position: relative; z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.8rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.4rem 5rem;
+}
+
+/* ── Card ─────────────────────────────────────────── */
+.card {
+  position: relative;
+  cursor: pointer;
+  perspective: 900px;
+  height: 320px;
+  transition: transform .25s ease, filter .25s ease;
+}
+.card:hover { transform: translateY(-6px); filter: brightness(1.03); }
+.card-inner {
+  position: relative;
+  width: 100%; height: 100%;
+  transform-style: preserve-3d;
+  transition: transform .65s cubic-bezier(.4,0,.2,1);
+  border-radius: 18px;
+}
+.card.open .card-inner { transform: rotateY(180deg); }
+
+.card-front, .card-back {
+  position: absolute; inset: 0;
+  border-radius: 18px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+
+/* Front */
+.card-front {
+  background: var(--paper);
+  border: 1.5px solid rgba(242,196,206,0.60);
+  box-shadow: 0 6px 28px var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .6rem;
+  overflow: hidden;
+}
+.card-front::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 0%, rgba(242,196,206,0.30) 0%, transparent 65%),
+    radial-gradient(ellipse at 80% 100%, rgba(201,169,110,0.15) 0%, transparent 60%);
+  pointer-events: none;
+  transition: background var(--transition);
+}
+.envelope-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  gap: .5rem;
+}
+.envelope-icon {
+  font-size: 3.4rem; line-height: 1;
+  transition: transform .35s ease;
+  filter: drop-shadow(0 4px 8px rgba(212,137,154,0.30));
+}
+.card.open .envelope-icon { transform: scale(1.12) rotate(-6deg); }
+
+.wax-seal {
+  width: 34px; height: 34px;
+  background: radial-gradient(circle at 38% 38%, #e8697a, var(--deep));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .95rem;
+  box-shadow: 0 3px 10px rgba(158,95,110,0.40);
+  transition: transform .35s ease;
+  color: #fff;
+}
+.card.open .wax-seal { transform: scale(1.18); }
+
+.card-label {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem; font-style: italic;
+  color: var(--ink);
+  text-align: center;
+  padding: 0 1.2rem; line-height: 1.4;
+  transition: color var(--transition);
+}
+.card-label-open {
+  font-family: 'Sacramento', cursive;
+  font-size: 1.55rem;
+  color: var(--deep);
+  line-height: 1.3; text-align: center;
+  padding: 0 .8rem;
+  transition: color var(--transition);
+}
+
+/* Back */
+.card-back {
+  background: var(--paper);
+  transform: rotateY(180deg);
+  border: 1.5px solid rgba(201,169,110,0.40);
+  box-shadow: 0 10px 40px var(--card-back-shadow);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 1.6rem 1.4rem 1.4rem;
+  gap: .65rem; overflow: hidden;
+}
+.card-back::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    transparent, transparent 27px,
+    var(--line-color) 28px
+  );
+  pointer-events: none; border-radius: 18px;
+  transition: background var(--transition);
+}
+.card-back::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0; height: 6px;
+  background: linear-gradient(90deg, var(--rose), var(--gold), var(--rose));
+  border-radius: 0 0 18px 18px;
+  opacity: .6;
+}
+.letter-emoji { font-size: 1.6rem; line-height: 1; }
+.letter-text {
+  font-size: .97rem; line-height: 1.65;
+  text-align: center; color: var(--ink);
+  font-style: italic; position: relative; z-index: 1;
+  transition: color var(--transition);
+}
+.letter-sign {
+  font-family: 'Sacramento', cursive;
+  font-size: 1.35rem; color: var(--deep);
+  position: relative; z-index: 1; margin-top: .2rem;
+  transition: color var(--transition);
+}
+
+/* ── Footer ───────────────────────────────────────── */
+.footer {
+  position: relative; z-index: 1;
+  text-align: center;
+  padding: 1.5rem 1rem 3rem;
+  font-family: 'Sacramento', cursive;
+  font-size: 1.5rem; color: var(--rose);
+  animation: pulse 3s ease-in-out infinite;
+  transition: color var(--transition);
+}
+@keyframes pulse { 0%,100% { opacity: .7; } 50% { opacity: 1; } }
+
+/* ── Sparkle ──────────────────────────────────────── */
+.sparkle {
+  position: fixed; pointer-events: none; z-index: 200;
+  font-size: 1.1rem;
+  animation: sparkleAnim .75s ease forwards;
+}
+@keyframes sparkleAnim {
+  0%   { opacity: 1; transform: translate(0,0) scale(1.2); }
+  100% { opacity: 0; transform: translate(var(--tx),var(--ty)) scale(.3); }
+}
+
+/* ── Responsive ───────────────────────────────────── */
+@media (max-width: 480px) {
+  .controls { top: .8rem; right: .8rem; gap: .4rem; }
+  .toggle-btn { padding: .28rem .5rem; font-size: .78rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="petals-bg" id="petals"></div>
+
+<!-- Controls -->
+<div class="controls">
+  <div class="toggle-pill" id="langPill">
+    <button class="toggle-btn active" data-lang="hu" onclick="setLang('hu')">🇭🇺 HU</button>
+    <button class="toggle-btn"        data-lang="en" onclick="setLang('en')">🇬🇧 EN</button>
+  </div>
+  <button class="toggle-icon-btn" id="themeBtn" onclick="toggleTheme()" title="Téma váltás">🌙</button>
+</div>
+
+<!-- Hero -->
+<header class="hero">
+  <p class="hero-sub" id="heroSub"></p>
+  <h1 class="hero-title" id="heroTitle"></h1>
+  <div class="hero-divider"></div>
+  <p class="hero-hint" id="heroHint"></p>
+</header>
+
+<main class="grid" id="grid"></main>
+<footer class="footer" id="footerText"></footer>
+
+<script>
+/* ── i18n strings ─────────────────────────────────── */
+const i18n = {
+  hu: {
+    heroSub:   'egy kis meglepetés neked, 💌',
+    heroTitle: 'Nyisd ki, ha…<br><span>Eszternek</span>',
+    heroHint:  'Nyisd ki a leveleket',
+    hintMouse: ' – húzd rá az egered 🖱',
+    hintTouch: ' – koppints rájuk 👆',
+    footer:    'szeretlek ✦ mindig ✦ minden pillanatban 🌸',
+  },
+  en: {
+    heroSub:   'a little surprise for you, 💌',
+    heroTitle: 'Open when…<br><span>for Eszter</span>',
+    heroHint:  'Open the letters',
+    hintMouse: ' – hover over them 🖱',
+    hintTouch: ' – tap to open 👆',
+    footer:    'I love you ✦ always ✦ in every moment 🌸',
+  }
+};
+
+/* ── Letter data ──────────────────────────────────── */
+const letters = [
+  {
+    emoji:'😢', seal:'💙', topEmoji:'🌧️',
+    front:{ hu:'Nyisd ki, ha<br><em>szomorú vagy</em>',            en:'Open when<br>you\'re <em>sad</em>' },
+    text: { hu:'Tudom, hogy most nehéz. De minden vihar elvonul – és te az egyik legerősebb ember, akit ismerek. Engedd el a könnyeket, aztán emlékezz: én itt vagyok, mindig. Hamarosan süt megint a nap. 🌤️',
+            en:'I know it\'s hard right now. But every storm passes – and you are one of the strongest people I know. Let the tears fall, then remember: I\'m here, always. The sun will shine again soon. 🌤️' },
+    sign: { hu:'– aki szeret téged', en:'– the one who loves you' },
+  },
+  {
+    emoji:'😊', seal:'🌟', topEmoji:'✨',
+    front:{ hu:'Nyisd ki, ha<br><em>boldog vagy</em>',             en:'Open when<br>you\'re <em>happy</em>' },
+    text: { hu:'Ez az. Ez az a ragyogás, ami miatt annyira szeretlek. Tartsd meg ezt az érzést – fotózd le, írd le, érezd teli tüdővel. Te megérdemled az összes örömet a világon. 🎉',
+            en:'This is it. This is the glow that makes me love you so much. Hold on to this feeling – photograph it, write it down, breathe it in fully. You deserve every joy in the world. 🎉' },
+    sign: { hu:'– a te rajongód', en:'– your biggest fan' },
+  },
+  {
+    emoji:'🥺', seal:'💗', topEmoji:'🌙',
+    front:{ hu:'Nyisd ki, ha<br><em>hiányzom neked</em>',          en:'Open when<br>you <em>miss me</em>' },
+    // FIX: "Én is hiányzol" → "Nekem is hiányzol" (az "Én is" + "hiányzol" grammatikailag összeférhetetlen volt)
+    text: { hu:'Nekem is hiányzol. Nagyon. Zárd be a szemed és érezd: valahol éppen most gondolok rád. A távolság csak szám – a szívem mindig melletted van. Hamarosan ott leszek. ✈️',
+            en:'I miss you too. So much. Close your eyes and feel it: somewhere, right now, I\'m thinking of you. Distance is just a number – my heart is always by your side. I\'ll be there soon. ✈️' },
+    sign: { hu:'– a te embered', en:'– your person' },
+  },
+  {
+    emoji:'🤗', seal:'🩷', topEmoji:'🫶',
+    front:{ hu:'Nyisd ki, ha<br><em>ölelésre vágysz</em>',         en:'Open when<br>you need <em>a hug</em>' },
+    text: { hu:'Képzeld el, hogy most átölellek. Szorosan. Beburkollak a karomba és nem engedlek el, amíg el nem múlik. Addig is: takaród + meleg tea + kedvenc sorozat. Megölellek hamarosan. 🧸',
+            en:'Imagine I\'m hugging you right now. Tight. I\'m wrapping you in my arms and not letting go until it passes. Until then: blanket + warm tea + your favourite show. I\'ll hug you for real soon. 🧸' },
+    sign: { hu:'– aki ölel messziről', en:'– hugging you from afar' },
+  },
+  {
+    emoji:'😴', seal:'🌛', topEmoji:'⭐',
+    front:{ hu:'Nyisd ki, ha<br><em>nem tudsz aludni</em>',        en:'Open when<br>you <em>can\'t sleep</em>' },
+    text: { hu:'Lélegezz lassan. Be… ki… Gondolj arra a napra, amikor először nevettünk együtt annyit, hogy fájt a hasunk. Mosolyogj rá halkan – és hagyd, hogy az álom csendesen elvigyen. 💤',
+            en:'Breathe slowly. In… out… Think of that day when we laughed together so hard our stomachs hurt for the first time. Smile softly at that memory – and let sleep carry you away gently. 💤' },
+    sign: { hu:'– aki szép álmokat küld', en:'– sending you sweet dreams' },
+  },
+  {
+    emoji:'💪', seal:'🔥', topEmoji:'🚀',
+    front:{ hu:'Nyisd ki, ha<br><em>motivációra van szükséged</em>', en:'Open when<br>you need <em>motivation</em>' },
+    text: { hu:'Te TUDOD csinálni. Nem csak úgy mondom – láttam, ahogy nehézségeken keresztül is mentél előre. Ez sem lesz másképp. Állj fel, rázd meg magad, és tedd meg az első lépést. Büszke vagyok rád. 🏆',
+            en:'You CAN do this. I\'m not just saying it – I\'ve watched you push through hard things before. This will be no different. Stand up, shake it off, and take that first step. I am so proud of you. 🏆' },
+    sign: { hu:'– a te szurkolód', en:'– your cheerleader' },
+  },
+  {
+    emoji:'😤', seal:'🕊️', topEmoji:'🌬️',
+    front:{ hu:'Nyisd ki, ha<br><em>mérges vagy</em>',             en:'Open when<br>you\'re <em>angry</em>' },
+    text: { hu:'Oké. Mérges vagy. Ez teljesen rendben van. Érezd – aztán mélyen lélegezz. Mielőtt cselekszel, kérdezd meg magadtól: egy hét múlva is számít ez? Ha igen, szólj nekem – ha nem, engedj el. ❤️',
+            en:'Okay. You\'re angry. That\'s completely valid. Feel it – then breathe deeply. Before you act, ask yourself: will this matter in a week? If yes, let\'s talk – if not, let it go. ❤️' },
+    sign: { hu:'– aki szeret dühösen is', en:'– who loves you even angry' },
+  },
+  {
+    emoji:'😑', seal:'🎨', topEmoji:'🌈',
+    front:{ hu:'Nyisd ki, ha<br><em>unatkozol</em>',               en:'Open when<br>you\'re <em>bored</em>' },
+    // FIX: "a jövőbeli önödnek" → "jövőbeli önmagadnak" (az "önöd" magázó/többes szám volt)
+    text: { hu:'Ötletek! ① Rajzolj valamit, ami ma eszedbe jutott. ② Írj egy mini-levelet jövőbeli önmagadnak. ③ Hívj fel – garantálom, kalandba esünk. A világ tele van meglepetéssel. 🗺️',
+            en:'Ideas! ① Draw something that crossed your mind today. ② Write a tiny letter to your future self. ③ Call me – I guarantee we\'ll end up on an adventure. The world is full of surprises. 🗺️' },
+    sign: { hu:'– a tervező', en:'– the planner' },
+  },
+  {
+    emoji:'🌸', seal:'💫', topEmoji:'👑',
+    front:{ hu:'Nyisd ki, ha<br><em>szépnek érzed magad</em>',     en:'Open when<br>you feel <em>beautiful</em>' },
+    // FIX: "elbűvölök tőled" → "elbűvölsz engem" (az "elbűvöl" tárgyas ige, a korábbi forma fordítva állt)
+    text: { hu:'IGEN. Igen, igen, igen. Mert mindig az vagy – nemcsak ma. A szemed, a mosolyod, az ahogy gondolkodsz… te minden nap elbűvölsz engem. Tartsd meg ezt az érzést örökre. 🌺',
+            en:'YES. Yes, yes, yes. Because you always are – not just today. Your eyes, your smile, the way you think… I am enchanted by you every single day. Hold on to this feeling forever. 🌺' },
+    sign: { hu:'– aki lát téged', en:'– who truly sees you' },
+  },
+  {
+    emoji:'🌟', seal:'✉️', topEmoji:'😄',
+    front:{ hu:'Nyisd ki, ha<br><em>mosolyra van szükséged</em>',  en:'Open when<br>you need <em>a smile</em>' },
+    // FIX: az eredeti lift/lépcső vicc értelmetlen volt magyarul. Helyette egy valódi magyar szójáték:
+    // "Mit mond a bal szem a jobb szemnek? »Köztünk szólva, te is látod ezt?«"
+    // — a "köztünk szólva" idiómában az "köztünk" szó szó szerint is igaz (az orr köztük van).
+    text: { hu:'Mit mond a bal szem a jobb szemnek? „Köztünk szólva, te is látod ezt?" 😄 Oké, oké – de komolyan: te a legcukiabb arckifejezéssel olvasod ezt, és én imádom ezért. Ott a mosoly! 🎊',
+            en:'Why can\'t you trust stairs? Because they\'re always up to something. 😄 Okay, okay – but seriously: you have the cutest expression right now reading this, and I love you for it. There\'s the smile! 🎊' },
+    sign: { hu:'– a rosszvicc-mestere', en:'– the bad joke master' },
+  },
+  {
+    emoji:'💭', seal:'🦋', topEmoji:'🧭',
+    front:{ hu:'Nyisd ki, ha<br><em>elveszettnek érzed magad</em>', en:'Open when<br>you feel <em>lost</em>' },
+    // FIX: "növekedésben vagy" → "épp fejlődsz" (a korábbi szerkezet magyartalan volt)
+    text: { hu:'Az elveszettség sokszor éppen azt jelzi, hogy épp fejlődsz. Nem kell mindent tudni. Lélegezz, bízz magadban – és ha kell, szólj nekem. Együtt megtaláljuk az utat. 🌿',
+            en:'Feeling lost often means you\'re growing. You don\'t need to have it all figured out. Breathe, trust yourself – and if you need to, reach out. We\'ll find the way together. 🌿' },
+    sign: { hu:'– aki melletted megy', en:'– walking beside you' },
+  },
+  {
+    emoji:'🎂', seal:'🎁', topEmoji:'🥳',
+    // FIX: "a születésnapodon van" → "ma a születésnapod van" (az ige alanya hiányzott)
+    front:{ hu:'Nyisd ki, ha<br><em>ma a születésnapod van</em>',  en:'Open when<br>it\'s your <em>birthday</em>' },
+    text: { hu:'Boldog születésnapot, gyönyörű! 🎉 Ma minden rólad szól – minden falat torta, minden gyertya, minden kívánság. Kívánom, hogy ez az év hozzon neked mindent, amit megérdemelsz. Én már tudom: rengeteg. 🎈',
+            en:'Happy birthday, beautiful! 🎉 Today is all about you – every bite of cake, every candle, every wish. I hope this year brings you everything you deserve. I already know: so, so much. 🎈' },
+    sign: { hu:'– a te legnagyobb rajongód', en:'– your biggest fan, always' },
+  },
+];
+
+/* ── State ────────────────────────────────────────── */
+let currentLang  = 'hu';
+let currentTheme = 'light';
+
+/* ── Detect touch ─────────────────────────────────── */
+const isTouch = !window.matchMedia('(pointer: fine)').matches;
+
+/* ── Render hero ──────────────────────────────────── */
+function renderHero() {
+  const t = i18n[currentLang];
+  document.getElementById('heroSub').innerHTML   = t.heroSub;
+  document.getElementById('heroTitle').innerHTML = t.heroTitle;
+  document.getElementById('heroHint').innerHTML  = t.heroHint + (isTouch ? t.hintTouch : t.hintMouse);
+  document.getElementById('footerText').textContent = t.footer;
+}
+
+/* ── Render cards ─────────────────────────────────── */
+function renderCards() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  letters.forEach((l) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-inner">
+        <div class="card-front">
+          <div class="envelope-wrap">
+            <div class="envelope-icon">💌</div>
+            <div class="wax-seal">${l.seal}</div>
+          </div>
+          <div class="card-label-open">${l.emoji}</div>
+          <div class="card-label">${l.front[currentLang]}</div>
+        </div>
+        <div class="card-back">
+          <div class="letter-emoji">${l.topEmoji}</div>
+          <p class="letter-text">${l.text[currentLang]}</p>
+          <div class="letter-sign">${l.sign[currentLang]}</div>
+        </div>
+      </div>`;
+
+    if (isTouch) {
+      card.addEventListener('click', () => {
+        const wasOpen = card.classList.contains('open');
+        card.classList.toggle('open', !wasOpen);
+        if (!wasOpen) spawnSparkles(card);
+      });
+    } else {
+      card.addEventListener('mouseenter', () => card.classList.add('open'));
+      card.addEventListener('mouseleave', () => card.classList.remove('open'));
+    }
+
+    grid.appendChild(card);
+  });
+}
+
+/* ── Language switch ──────────────────────────────── */
+function setLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.querySelectorAll('#langPill .toggle-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+  renderHero();
+  renderCards();
+}
+
+/* ── Theme switch ─────────────────────────────────── */
+function toggleTheme() {
+  currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  document.getElementById('themeBtn').textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+}
+
+/* ── Sparkles ─────────────────────────────────────── */
+function spawnSparkles(card) {
+  const rect = card.getBoundingClientRect();
+  const cx = rect.left + rect.width  / 2;
+  const cy = rect.top  + rect.height / 2;
+  const glyphs = ['✨','💖','🌸','⭐','💫','🌟','🩷','🌺','💕'];
+  for (let i = 0; i < 10; i++) {
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
+    const angle = (i / 10) * 2 * Math.PI + Math.random() * .4;
+    const dist  = 55 + Math.random() * 55;
+    s.style.setProperty('--tx', `${Math.cos(angle)*dist}px`);
+    s.style.setProperty('--ty', `${Math.sin(angle)*dist}px`);
+    s.style.left  = `${cx}px`;
+    s.style.top   = `${cy}px`;
+    s.style.animationDelay = `${Math.random() * .1}s`;
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 900);
+  }
+}
+
+/* ── Floating petals ──────────────────────────────── */
+const petalBox    = document.getElementById('petals');
+const petalGlyphs = ['🌸','🌺','💮','🌷','✿','❀','🩷','💕','🌼','✨'];
+function makePetal() {
+  const p = document.createElement('div');
+  p.className = 'petal';
+  p.textContent = petalGlyphs[Math.floor(Math.random() * petalGlyphs.length)];
+  p.style.left = Math.random() * 100 + 'vw';
+  p.style.animationDuration = (6 + Math.random() * 10) + 's';
+  p.style.animationDelay    = (Math.random() * 8) + 's';
+  p.style.fontSize = (.65 + Math.random() * .8) + 'rem';
+  petalBox.appendChild(p);
+  setTimeout(() => p.remove(), 20000);
+}
+for (let i = 0; i < 22; i++) setTimeout(makePetal, i * 380);
+setInterval(makePetal, 1700);
+
+/* ── Init ─────────────────────────────────────────── */
+renderHero();
+renderCards();
+</script>
+</body>
+</html>
