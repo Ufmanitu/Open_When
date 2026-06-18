@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hu" data-theme="light" data-lang="hu">
+<html lang="hu">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,24 +9,8 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── Theme variables ──────────────────────────────── */
+/* ── Theme variables (dark only) ──────────────────── */
 :root {
-  --cream:      #FDF6EE;
-  --paper:      #FFF9F3;
-  --blush:      #F2C4CE;
-  --rose:       #D4899A;
-  --deep:       #9E5F6E;
-  --gold:       #C9A96E;
-  --ink:        #4A2C35;
-  --muted:      #8C6570;
-  --card-shadow: rgba(212,137,154,0.18);
-  --card-back-shadow: rgba(212,137,154,0.22);
-  --line-color:  rgba(242,196,206,0.25);
-  --toggle-bg:   rgba(212,137,154,0.15);
-  --toggle-border: rgba(201,169,110,0.50);
-  --transition: .45s cubic-bezier(.4,0,.2,1);
-}
-[data-theme="dark"] {
   --cream:      #180e13;
   --paper:      #22131a;
   --blush:      #5a2d3a;
@@ -40,6 +24,7 @@
   --line-color:  rgba(90,45,58,0.40);
   --toggle-bg:   rgba(90,45,58,0.40);
   --toggle-border: rgba(212,169,110,0.35);
+  --transition: .45s cubic-bezier(.4,0,.2,1);
 }
 
 html { scroll-behavior: smooth; }
@@ -52,61 +37,41 @@ body {
   transition: background-color var(--transition), color var(--transition);
 }
 
-/* ── Control bar ──────────────────────────────────── */
-.controls {
-  position: fixed;
-  top: 1.1rem; right: 1.2rem;
-  z-index: 100;
+/* ── Top tab bar (Letters / Memories) ─────────────── */
+.tab-bar {
+  position: sticky;
+  top: 0;
+  z-index: 200;
   display: flex;
-  gap: .6rem;
-  align-items: center;
+  justify-content: center;
+  gap: .9rem;
+  padding: 1rem 1rem .85rem;
+  background: linear-gradient(180deg, var(--cream) 70%, transparent);
 }
-.toggle-pill {
-  display: flex;
-  align-items: center;
-  gap: 0;
+.tab-btn {
+  border: 2px solid var(--gold);
   background: var(--toggle-bg);
-  border: 1.5px solid var(--toggle-border);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-radius: 100px;
-  padding: .22rem .28rem;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: background var(--transition), border-color var(--transition);
-}
-.toggle-btn {
-  border: none;
-  background: transparent;
-  border-radius: 100px;
-  cursor: pointer;
-  font-size: .82rem;
-  padding: .32rem .62rem;
-  color: var(--muted);
+  padding: .75rem 1.7rem;
   font-family: 'Cormorant Garamond', serif;
-  font-weight: 400;
-  letter-spacing: .04em;
-  transition: background .25s ease, color .25s ease, transform .2s ease;
-  line-height: 1;
-  white-space: nowrap;
-}
-.toggle-btn:hover { transform: scale(1.06); }
-.toggle-btn.active {
-  background: linear-gradient(135deg, var(--rose), var(--deep));
-  color: #fff;
-  box-shadow: 0 2px 10px rgba(158,95,110,0.35);
-}
-.toggle-icon-btn {
-  border: none;
-  background: var(--toggle-bg);
-  border: 1.5px solid var(--toggle-border);
-  border-radius: 100px;
+  font-style: italic;
+  font-size: 1.15rem;
+  letter-spacing: .02em;
+  color: var(--ink);
   cursor: pointer;
-  font-size: 1rem;
-  width: 2.2rem; height: 2.2rem;
-  display: flex; align-items: center; justify-content: center;
-  transition: background var(--transition), border-color var(--transition), transform .2s ease;
-  backdrop-filter: blur(12px);
+  box-shadow: 0 6px 22px rgba(0,0,0,0.30);
+  transition: transform .2s ease, background .25s ease, box-shadow .25s ease;
 }
-.toggle-icon-btn:hover { transform: scale(1.1) rotate(15deg); }
+.tab-btn:hover { transform: translateY(-2px) scale(1.04); }
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--rose), var(--deep));
+  color: #1a0f13;
+  font-style: normal;
+  font-weight: 600;
+  box-shadow: 0 8px 26px rgba(196,120,138,0.45);
+}
 
 /* ── Petals ───────────────────────────────────────── */
 .petals-bg {
@@ -340,10 +305,130 @@ body {
   100% { opacity: 0; transform: translate(var(--tx),var(--ty)) scale(.3); }
 }
 
+/* ── Locked birthday card ─────────────────────────── */
+.card.locked-card { cursor: not-allowed; }
+.card.locked-card:hover { transform: none; filter: none; }
+.lock-badge {
+  position: absolute; top: .7rem; right: .9rem;
+  font-size: 1.05rem; opacity: .65;
+}
+.locked-front { opacity: .93; }
+.locked-countdown {
+  font-size: .76rem; color: var(--muted);
+  letter-spacing: .03em; font-style: italic;
+  margin-top: .1rem; padding: 0 1rem; text-align: center;
+  transition: color var(--transition);
+}
+@keyframes shakeAnim {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  20% { transform: translateX(-7px) rotate(-1.2deg); }
+  40% { transform: translateX(7px) rotate(1.2deg); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+.card.shake .card-inner { animation: shakeAnim .45s ease; }
+
+/* ── Tab bar reveal animation ──────────────────────── */
+@keyframes tabPop {
+  0%   { transform: scale(0) translateY(-30px); opacity: 0; }
+  55%  { transform: scale(1.08) translateY(4px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); }
+}
+.tab-bar.tab-reveal .tab-btn { animation: tabPop .65s cubic-bezier(.34,1.56,.64,1); }
+
+/* ── Memories gallery ─────────────────────────────── */
+.memory-card {
+  position: relative;
+  background: var(--paper);
+  border: 1.5px solid rgba(242,196,206,0.60);
+  border-radius: 18px;
+  box-shadow: 0 6px 28px var(--card-shadow);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: transform .25s ease, filter .25s ease, background var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+.memory-card:hover { transform: translateY(-6px); filter: brightness(1.03); }
+.memory-photo {
+  width: 100%; aspect-ratio: 4 / 3;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--blush), var(--gold));
+}
+.memory-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.memory-placeholder {
+  display: flex; flex-direction: column; align-items: center; gap: .4rem;
+  color: #fff; opacity: .9;
+}
+.memory-placeholder .ph-icon { font-size: 2.1rem; }
+.memory-placeholder .ph-text {
+  font-size: .78rem; font-style: italic; letter-spacing: .03em;
+  text-align: center; padding: 0 .8rem;
+}
+.memory-caption {
+  font-size: .95rem; line-height: 1.55; font-style: italic;
+  text-align: center; color: var(--ink);
+  padding: .9rem 1rem .2rem;
+  transition: color var(--transition);
+}
+.memory-date {
+  font-family: 'Sacramento', cursive;
+  font-size: 1.1rem; color: var(--deep);
+  text-align: center; padding: .2rem 1rem 1rem;
+  transition: color var(--transition);
+}
+
+/* ── Popup modal ──────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(74,44,53,0.55);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.2rem;
+  animation: overlayFade .3s ease;
+}
+@keyframes overlayFade { from { opacity: 0; } to { opacity: 1; } }
+.modal-card {
+  background: var(--paper);
+  border: 2px solid var(--gold);
+  border-radius: 24px;
+  padding: 2.6rem 2rem 2.2rem;
+  max-width: 420px; width: 100%;
+  text-align: center;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.40);
+  animation: modalPop .45s cubic-bezier(.34,1.56,.64,1);
+  transition: background var(--transition), border-color var(--transition);
+}
+@keyframes modalPop {
+  from { transform: scale(.7); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+.modal-emoji { font-size: 3.4rem; margin-bottom: .7rem; animation: pulse 2s ease-in-out infinite; }
+.modal-title {
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: 1.55rem; color: var(--ink);
+  margin-bottom: .8rem; line-height: 1.3;
+  transition: color var(--transition);
+}
+.modal-text {
+  font-size: 1.05rem; color: var(--muted); line-height: 1.65;
+  margin-bottom: 1.6rem;
+  transition: color var(--transition);
+}
+.modal-btn {
+  background: linear-gradient(135deg, var(--rose), var(--deep));
+  color: #fff; border: none; border-radius: 100px;
+  padding: .75rem 1.9rem;
+  font-family: 'Cormorant Garamond', serif; font-size: 1.08rem;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(158,95,110,0.35);
+  transition: transform .2s ease;
+}
+.modal-btn:hover { transform: scale(1.06); }
+
 /* ── Responsive ───────────────────────────────────── */
 @media (max-width: 480px) {
-  .controls { top: .8rem; right: .8rem; gap: .4rem; }
-  .toggle-btn { padding: .28rem .5rem; font-size: .78rem; }
+  .tab-bar { gap: .5rem; padding: .8rem .6rem .65rem; }
+  .tab-btn { padding: .6rem 1.1rem; font-size: 1rem; }
 }
 </style>
 </head>
@@ -351,153 +436,220 @@ body {
 
 <div class="petals-bg" id="petals"></div>
 
-<!-- Controls -->
-<div class="controls">
-  <div class="toggle-pill" id="langPill">
-    <button class="toggle-btn active" data-lang="hu" onclick="setLang('hu')">🇭🇺 HU</button>
-    <button class="toggle-btn"        data-lang="en" onclick="setLang('en')">🇬🇧 EN</button>
-  </div>
-  <button class="toggle-icon-btn" id="themeBtn" onclick="toggleTheme()" title="Téma váltása">🌙</button>
+<!-- Big top tab bar — hidden until the birthday letter has been opened once on/after 2026.06.26, then stays visible forever -->
+<div class="tab-bar" id="tabBar" style="display:none;">
+  <button class="tab-btn active" id="tabLetters" onclick="showMain()">📖 Levelek</button>
+  <button class="tab-btn" id="tabMemories" onclick="showMemories()">💕 Emlékeink</button>
 </div>
 
-<!-- Hero -->
-<header class="hero">
-  <p class="hero-sub" id="heroSub"></p>
-  <h1 class="hero-title" id="heroTitle"></h1>
-  <div class="hero-divider"></div>
-  <p class="hero-hint" id="heroHint"></p>
-</header>
+<div id="mainView">
+  <!-- Hero -->
+  <header class="hero">
+    <p class="hero-sub" id="heroSub"></p>
+    <h1 class="hero-title" id="heroTitle"></h1>
+    <div class="hero-divider"></div>
+    <p class="hero-hint" id="heroHint"></p>
+  </header>
 
-<main class="grid" id="grid"></main>
-<footer class="footer" id="footerText"></footer>
+  <main class="grid" id="grid"></main>
+  <footer class="footer" id="footerText"></footer>
+</div>
+
+<!-- Hidden "our memories" view – only revealed after the birthday letter is opened & closed once -->
+<div id="memoriesView" style="display:none;">
+  <header class="hero">
+    <p class="hero-sub" id="memSub"></p>
+    <h1 class="hero-title" id="memTitle"></h1>
+    <div class="hero-divider"></div>
+    <p class="hero-hint" id="memHint"></p>
+  </header>
+
+  <main class="grid memories-grid" id="memoriesGrid"></main>
+
+  <footer class="footer" id="memFooterText"></footer>
+</div>
+
+<!-- Popup shown the first time the birthday letter is closed (after the unlock date) -->
+<div class="modal-overlay" id="popupOverlay" style="display:none;">
+  <div class="modal-card">
+    <div class="modal-emoji">💕</div>
+    <h2 class="modal-title" id="popupTitle"></h2>
+    <p class="modal-text" id="popupText"></p>
+    <button class="modal-btn" id="popupBtn" onclick="goToMemoriesFromPopup()"></button>
+  </div>
+</div>
+
 
 <script>
 /* ── i18n strings ─────────────────────────────────── */
 const i18n = {
-  hu: {
-    heroSub:   'egy apró meglepetés neked 💌',
-    heroTitle: 'Nyisd ki, ha…<br><span>Eszternek</span>',
-    heroHint:  'Nyisd ki a leveleket',
-    hintMouse: ' – húzd fölé az egeret 🖱',
-    hintTouch: ' – koppints rájuk 👆',
-    footer:    'Szeretlek ✦ mindig ✦ minden pillanatban 🌸',
-  },
-  en: {
-    heroSub:   'a little surprise for you, 💌',
-    heroTitle: 'Open when…<br><span>for Eszter</span>',
-    heroHint:  'Open the letters',
-    hintMouse: ' – hover over them 🖱',
-    hintTouch: ' – tap to open 👆',
-    footer:    'I love you ✦ always ✦ in every moment 🌸',
-  }
+  heroSub:   'egy apró meglepetés neked 💌',
+  heroTitle: 'Nyisd ki, ha…<br><span>Eszternek</span>',
+  heroHint:  'Nyisd ki a leveleket',
+  hintMouse: ' – húzd fölé az egeret 🖱',
+  hintTouch: ' – koppints rájuk 👆',
+  footer:    'Szeretlek ✦ mindig ✦ minden pillanatban 🌸',
+  memSub:    'a mi kis történetünk 💕',
+  memTitle:  'Emlékeink<br><span>kettőnké</span>',
+  memHint:   'Ezek a pillanatok mindig velünk maradnak',
+  memFooter: 'És még annyi közös emlék vár ránk… 🌸',
+  phText:    'ide kerül egy fotó',
+  popupTitle:'Egy új meglepetés vár rád! 💕',
+  popupText: 'Most nyílt egy titkos fül… nézd meg, mit rejt! 🌸',
+  popupBtn:  'Megnézem! ✨',
+  lockedUntil: '🔒 Zárva eddig: 2026. 06. 26.',
+  lockedDays:  (d) => `még ${d} nap`,
 };
 
 /* ── Letter data ──────────────────────────────────── */
 const letters = [
   {
-    emoji:'😢', seal:'💙', topEmoji:'🌧️',
-    front:{ hu:'Nyisd ki, ha<br><em>szomorú vagy</em>',            en:'Open when<br>you\'re <em>sad</em>' },
-    text: { hu:'Tudom, hogy most nehéz. De minden vihar egyszer elvonul, és te vagy az egyik legerősebb ember, akit ismerek. Engedd ki a könnyeidet, aztán emlékezz: én itt vagyok veled, mindig. Bízz bennem, minden rendben lesz. 🌤️',
-            en:'I know it\'s hard right now. But every storm passes – and you are one of the strongest people I know. Let the tears fall, then remember: I\'m here, always. Trust me, everything is going to be fine. 🌤️' },
-    sign: { hu:'– aki nagyon szeret téged', en:'– the one who loves you' },
+    emoji:'😊', seal:'🌟', topEmoji:'✨',
+    front: 'Nyisd ki, ha<br><em>boldog vagy</em>',
+    text: 'Ez az a ragyogás, amiért annyira szeretlek. Őrizd meg ezt az érzést – írd le, fotózd le, éld meg teljes szívvel. Te tényleg megérdemled a világ összes örömét. 🎉',
+    sign: '– a legnagyobb rajongód',
   },
   {
-    emoji:'😊', seal:'🌟', topEmoji:'✨',
-    front:{ hu:'Nyisd ki, ha<br><em>boldog vagy</em>',             en:'Open when<br>you\'re <em>happy</em>' },
-    text: { hu:'Ez az a ragyogás, amiért annyira szeretlek. Őrizd meg ezt az érzést – írd le, fotózd le, éld meg teljes szívvel. Te tényleg megérdemled a világ összes örömét. 🎉',
-            en:'This is it. This is the glow that makes me love you so much. Hold on to this feeling – photograph it, write it down, breathe it in fully. You deserve every joy in the world. 🎉' },
-    sign: { hu:'– a legnagyobb rajongód', en:'– your biggest fan' },
+    emoji:'😢', seal:'💙', topEmoji:'🌧️',
+    front: 'Nyisd ki, ha<br><em>szomorú vagy</em>',
+    text: 'Tudom, hogy most nehéz. De minden vihar egyszer elvonul, és te vagy az egyik legerősebb ember, akit ismerek. Engedd ki a könnyeidet, aztán emlékezz: én itt vagyok veled, mindig. Bízz bennem, minden rendben lesz. 🌤️',
+    sign: '– aki nagyon szeret téged',
   },
   {
     emoji:'🥺', seal:'💗', topEmoji:'🌙',
-    front:{ hu:'Nyisd ki, ha<br><em>hiányzom neked</em>',          en:'Open when<br>you <em>miss me</em>' },
+    front: 'Nyisd ki, ha<br><em>hiányzom neked</em>',
     // FIX: "Én is hiányzol" → "Nekem is hiányzol" (az "Én is" + "hiányzol" grammatikailag összeférhetetlen volt)
-    text: { hu:'Nekem is nagyon hiányzol. Csukd be a szemed, és érezd: valahol épp most is rád gondolok. A távolság csak egy szám – a szívem mindig melletted van. Hamarosan ott leszek. ✈️',
-            en:'I miss you too. So much. Close your eyes and feel it: somewhere, right now, I\'m thinking of you. Distance is just a number – my heart is always by your side. I\'ll be there soon. ✈️' },
-    sign: { hu:'– a te embered', en:'– your person' },
+    text: 'Nekem is nagyon hiányzol. Csukd be a szemed, és érezd: valahol épp most is rád gondolok. A távolság csak egy szám – a szívem mindig melletted van. Hamarosan ott leszek. ✈️',
+    sign: '– a te embered',
   },
   {
     emoji:'🤗', seal:'🩷', topEmoji:'🫶',
-    front:{ hu:'Nyisd ki, ha<br><em>ölelésre vágysz</em>',         en:'Open when<br>you need <em>a hug</em>' },
-    text: { hu:'Képzeld el, hogy most átölellek. Szorosan. Köréd fonom a karom, és nem engedlek el, amíg jobb nem lesz. Addig is: takaró, meleg tea és a kedvenc sorozatod. Hamarosan élőben is megölellek. 🧸',
-            en:'Imagine I\'m hugging you right now. Tight. I\'m wrapping you in my arms and not letting go until it passes. Until then: blanket + warm tea + your favourite show. I\'ll hug you for real soon. 🧸' },
-    sign: { hu:'– aki messziről ölel', en:'– hugging you from afar' },
+    front: 'Nyisd ki, ha<br><em>ölelésre vágysz</em>',
+    text: 'Képzeld el, hogy most átölellek. Szorosan. Köréd fonom a karom, és nem engedlek el, amíg jobb nem lesz. Addig is: takaró, meleg tea és a kedvenc sorozatod. Hamarosan élőben is megölellek. 🧸',
+    sign: '– aki messziről ölel',
   },
   {
     emoji:'😴', seal:'🌛', topEmoji:'⭐',
-    front:{ hu:'Nyisd ki, ha<br><em>nem tudsz aludni</em>',        en:'Open when<br>you <em>can\'t sleep</em>' },
-    text: { hu:'Lélegezz lassan. Be… ki… Képzeld azt, hogy szorosan összebújunk és a füledbe szuszogok. Gondolj arra a napra, amikor először nevettünk annyit, hogy fájt a hasunk. Mosolyogj rá halkan, és hagyd, hogy az álom szépen elringasson. 💤',
-            en:'Breathe slowly. In… out… Think of that day when we laughed together so hard our stomachs hurt for the first time. Smile softly at that memory – and let sleep carry you away gently. 💤' },
-    sign: { hu:'– aki szép álmokat küld', en:'– sending you sweet dreams' },
+    front: 'Nyisd ki, ha<br><em>nem tudsz aludni</em>',
+    text: 'Lélegezz lassan. Be… ki… Képzeld azt, hogy szorosan összebújunk és a füledbe szuszogok. Gondolj arra a napra, amikor először nevettünk annyit, hogy fájt a hasunk. Mosolyogj rá halkan, és hagyd, hogy az álom szépen elringasson. 💤',
+    sign: '– aki szép álmokat küld',
   },
   {
     emoji:'💪', seal:'🔥', topEmoji:'🚀',
-    front:{ hu:'Nyisd ki, ha<br><em>motivációra van szükséged</em>', en:'Open when<br>you need <em>motivation</em>' },
-    text: { hu:'Képes vagy rá. Nem csak beszélek: láttam, ahogy megküzdesz a nehézségekkel. Ezen is át fogsz jutni. Állj fel, rázd meg magad, és tedd meg az első lépést. Büszke vagyok rád. 🏆',
-            en:'You CAN do this. I\'m not just saying it – I\'ve watched you push through hard things before. This will be no different. Stand up, shake it off, and take that first step. I am so proud of you. 🏆' },
-    sign: { hu:'– a te szurkolód', en:'– your cheerleader' },
+    front: 'Nyisd ki, ha<br><em>motivációra van szükséged</em>',
+    text: 'Képes vagy rá. Nem csak beszélek: láttam, ahogy megküzdesz a nehézségekkel. Ezen is át fogsz jutni. Állj fel, rázd meg magad, és tedd meg az első lépést. Büszke vagyok rád. 🏆',
+    sign: '– a te szurkolód',
   },
   {
     emoji:'😤', seal:'🕊️', topEmoji:'🌬️',
-    front:{ hu:'Nyisd ki, ha<br><em>mérges vagy</em>',             en:'Open when<br>you\'re <em>angry</em>' },
-    text: { hu:'Rendben, most dühös vagy. Ez teljesen emberi. Érezd, hogy átjár, aztán vegyél egy mély levegőt. Mielőtt reagálsz, kérdezd meg magadtól: egy hét múlva is számítani fog? Ha igen, beszéljük meg. Ha nem, engedd el. ❤️',
-            en:'Okay. You\'re angry. That\'s completely valid. Feel it – then breathe deeply. Before you act, ask yourself: will this matter in a week? If yes, let\'s talk – if not, let it go. ❤️' },
-    sign: { hu:'– aki veled van, még dühösen is', en:'– who loves you even angry' },
+    front: 'Nyisd ki, ha<br><em>mérges vagy</em>',
+    text: 'Rendben, most dühös vagy. Ez teljesen emberi. Érezd, hogy átjár, aztán vegyél egy mély levegőt. Mielőtt reagálsz, kérdezd meg magadtól: egy hét múlva is számítani fog? Ha igen, beszéljük meg. Ha nem, engedd el. ❤️',
+    sign: '– aki veled van, még dühösen is',
   },
   {
     emoji:'😑', seal:'🎨', topEmoji:'🌈',
-    front:{ hu:'Nyisd ki, ha<br><em>unatkozol</em>',               en:'Open when<br>you\'re <em>bored</em>' },
+    front: 'Nyisd ki, ha<br><em>unatkozol</em>',
     // FIX: "a jövőbeli önödnek" → "jövőbeli önmagadnak" (az "önöd" magázó/többes szám volt)
-    text: { hu:'Ötletek: ① Rajzolj valamit, ami ma eszedbe jutott. ② Írj egy rövid levelet a jövőbeli önmagadnak. <br> ③ Hívj fel, hátha ellérsz és el tudom mondani, mennnnnnnnnnyire szeretlek❤️ 🗺️',
-            en:'Ideas! ① Draw something that crossed your mind today. ② Write a tiny letter to your future self. ③ Call me – I guarantee we\'ll end up on an adventure. The world is full of surprises. 🗺️' },
-    sign: { hu:'– a tervező', en:'– the planner' },
+    text: 'Ötletek: ① Rajzolj valamit, ami ma eszedbe jutott. ② Írj egy rövid levelet a jövőbeli önmagadnak. <br> ③ Hívj fel, hátha ellérsz és el tudom mondani, mennnnnnnnnnyire szeretlek❤️ 🗺️',
+    sign: '– a tervező',
   },
   {
     emoji:'🌸', seal:'💫', topEmoji:'👑',
-    front:{ hu:'Nyisd ki, ha<br><em>gyönyörűnek érzed magad</em>, és akkor is ha épp nem - hiszen te mindig gyönyörű vagy!',     en:'Open when<br>you feel <em>beautiful</em>' },
+    front: 'Nyisd ki, ha<br><em>gyönyörűnek érzed magad</em>, és akkor is ha épp nem - hiszen te mindig gyönyörű vagy!',
     // FIX: "elbűvölök tőled" → "elbűvölsz engem" (az "elbűvöl" tárgyas ige, a korábbi forma fordítva állt)
-    text: { hu:'IGEN! Igen, igen, igen. Mert ez nem csak ma igaz rád. A szemed, a mosolyod, Te Bombanőőő! Minden nap elbűvölsz. Őrizd meg ezt az érzést. 🌺',
-            en:'YES! Yes, yes, yes. Because you always are – not just today. Your eyes, your smile, I love it... I am enchanted by you every single day. Hold on to this feeling forever. 🌺' },
-    sign: { hu:'– aki tényleg lát téged', en:'– who truly sees you' },
+    text: 'IGEN! Igen, igen, igen. Mert ez nem csak ma igaz rád. A szemed, a mosolyod, Te Bombanőőő! Minden nap elbűvölsz. Őrizd meg ezt az érzést. 🌺',
+    sign: '– aki tényleg lát téged',
   },
   {
     emoji:'🌟', seal:'✉️', topEmoji:'😄',
-    front:{ hu:'Nyisd ki, ha<br><em>mosolyra van szükséged</em>',  en:'Open when<br>you need <em>a smile</em>' },
+    front: 'Nyisd ki, ha<br><em>mosolyra van szükséged</em>',
     // FIX: az eredeti lift/lépcső vicc értelmetlen volt magyarul. Helyette egy valódi magyar szójáték:
     // "Mit mond a bal szem a jobb szemnek? »Köztünk szólva, te is látod ezt?«"
     // — a "köztünk szólva" idiómában az "köztünk" szó szó szerint is igaz (az orr köztük van).
-    text: { hu:'Mit mond a bal szem a jobb szemnek? „Köztünk szólva, te is látod ezt?” 😄 Jó, jó – de komolyan: olyan cuki arccal olvasod ezt, hogy egyszerűen nem lehet nem mosolyogni rajtad. Na, meg is van a mosoly! 🎊',
-            en:'Why can\'t you trust stairs? Because they\'re always up to something. 😄 Okay, okay – but seriously: you have the cutest expression right now reading this, and I love you for it. There\'s the smile! 🎊' },
-    sign: { hu:'– a rosszvicc-mestere', en:'– the bad joke master' },
+    text: 'Mit mond a bal szem a jobb szemnek? „Köztünk szólva, te is látod ezt?” 😄 Jó, jó – de komolyan: olyan cuki arccal olvasod ezt, hogy egyszerűen nem lehet nem mosolyogni rajtad. Na, meg is van a mosoly! 🎊',
+    sign: '– a rosszvicc-mestere',
   },
   {
     emoji:'💭', seal:'🦋', topEmoji:'🧭',
-    front:{ hu:'Nyisd ki, ha<br><em>elveszettnek érzed magad</em>', en:'Open when<br>you feel <em>lost</em>' },
+    front: 'Nyisd ki, ha<br><em>elveszettnek érzed magad</em>',
     // FIX: "növekedésben vagy" → "épp fejlődsz" (a korábbi szerkezet magyartalan volt)
-    text: { hu:'Az elveszettség sokszor csak azt jelzi, hogy éppen fejlődsz. Nem kell most mindent tudnod. Lélegezz, bízz magadban – és ha kell, szólj nekem. Együtt megtaláljuk az utat. 🌿',
-            en:'Feeling lost often means you\'re growing. You don\'t need to have it all figured out. Breathe, trust yourself – and if you need to, reach out. We\'ll find the way together. 🌿' },
-    sign: { hu:'– aki melletted megy', en:'– walking beside you' },
+    text: 'Az elveszettség sokszor csak azt jelzi, hogy éppen fejlődsz. Nem kell most mindent tudnod. Lélegezz, bízz magadban – és ha kell, szólj nekem. Együtt megtaláljuk az utat. 🌿',
+    sign: '– aki melletted megy',
   },
   {
+    id: 'birthday',
     emoji:'🎂', seal:'🎁', topEmoji:'🥳',
     // FIX: "a születésnapodon van" → "ma a születésnapod van" (az ige alanya hiányzott)
-    front:{ hu:'Nyisd ki, ha<br><em>ma van a születésnapod</em>',  en:'Open when<br>it\'s your <em>birthday</em>' },
-    text: { hu:'Boldog születésnapot, gyönyörű! 🎉 Ma minden rólad szól – a torta, a gyertyák, a kívánságok, minden. Kívánom neked az összes jót ezen a világon. Mert megérdemled. Szeretlek picim.❤️ 🎈',
-            en:'Happy birthday, beautiful! 🎉 Today is all about you – every bite of cake, every candle, every wish. I hope this year brings you everything you deserve. I already know: so, so much. 🎈' },
-    sign: { hu:'– a te legnagyobb rajongód', en:'– your biggest fan, always' },
+    front: 'Nyisd ki, ha<br><em>ma van a születésnapod</em>',
+    text: 'Boldog születésnapot, gyönyörű! 🎉 Ma minden rólad szól – a torta, a gyertyák, a kívánságok, minden. Kívánom neked az összes jót ezen a világon. Mert megérdemled. Szeretlek picim.❤️ 🎈',
+    sign: '– a te legnagyobb rajongód',
   },
 ];
-
-/* ── State ────────────────────────────────────────── */
-let currentLang  = 'hu';
-let currentTheme = 'light';
 
 /* ── Detect touch ─────────────────────────────────── */
 const isTouch = !window.matchMedia('(pointer: fine)').matches;
 
+/* ── Birthday letter unlock date ──────────────────────
+   The birthday letter stays sealed until this date/time, checked
+   against the visitor's own device clock. This is a sweet
+   surprise-lock for a personal gift, not a tamper-proof one.      */
+const UNLOCK_DATE = new Date(2026, 5, 26, 0, 0, 0); // 2026.06.26 (month is 0-indexed)
+const MEM_KEY = 'eszter_memories_unlocked';
+
+/* ── Test mode (for YOU to check things, not for her) ─────────────
+   Add these to the URL, never share them with her:
+   ?forceUnlock=1     → pretend the unlock date already passed
+   ?forceLocked=1     → pretend it's still locked (even after 06.26)
+   ?resetMemories=1   → clears the "already revealed" flag so you
+                         can replay the first-open popup + tab reveal
+   Example for a full first-open test:
+   index.html?forceUnlock=1&resetMemories=1                         */
+const urlParams          = new URLSearchParams(window.location.search);
+const TEST_FORCE_UNLOCK  = urlParams.get('forceUnlock') === '1';
+const TEST_FORCE_LOCKED  = urlParams.get('forceLocked') === '1';
+const TEST_RESET_MEMORIES = urlParams.get('resetMemories') === '1';
+const TEST_MODE = TEST_FORCE_UNLOCK || TEST_FORCE_LOCKED || TEST_RESET_MEMORIES;
+
+if (TEST_RESET_MEMORIES) localStorage.removeItem(MEM_KEY);
+
+function isBirthdayUnlocked() {
+  if (TEST_FORCE_UNLOCK) return true;
+  if (TEST_FORCE_LOCKED) return false;
+  return new Date() >= UNLOCK_DATE;
+}
+function daysUntilUnlock() {
+  const diff = UNLOCK_DATE.getTime() - Date.now();
+  return Math.max(0, Math.ceil(diff / 86400000));
+}
+function showTestBanner() {
+  const flags = [];
+  if (TEST_FORCE_UNLOCK)   flags.push('forceUnlock');
+  if (TEST_FORCE_LOCKED)   flags.push('forceLocked');
+  if (TEST_RESET_MEMORIES) flags.push('resetMemories');
+  const bar = document.createElement('div');
+  bar.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;' +
+    'background:#222;color:#ffd166;font-family:monospace;font-size:.78rem;' +
+    'text-align:center;padding:.35rem;letter-spacing:.02em;';
+  bar.textContent = '🧪 TESZT MÓD aktív: ' + flags.join(', ') + ' — ezt az URL-t soha ne küldd el neki!';
+  document.body.appendChild(bar);
+}
+
+/* ── "Our memories" gallery data ──────────────────────
+   To add a real photo: put the image file next to this HTML file
+   (e.g. inside a "photos" folder) and set img: 'photos/yourfile.jpg'.
+   Leave img: '' to keep the soft placeholder box for now.         */
+const memories = [
+  { img: '', date: '', caption: 'Az első közös fotónk… 💕' },
+  { img: '', date: '', caption: 'Az a nap, amikor megismertelek' },
+  { img: '', date: '', caption: 'Egy kirándulás, amit sosem felejtek el' },
+  { img: '', date: '', caption: 'Az a nevetés, amit imádok' },
+  { img: '', date: '', caption: 'Egy csendes, boldog este kettőnknek' },
+  { img: '', date: '', caption: 'És még sok, sok emlék jön… 💫' },
+];
+
 /* ── Render hero ──────────────────────────────────── */
 function renderHero() {
-  const t = i18n[currentLang];
+  const t = i18n;
   document.getElementById('heroSub').innerHTML   = t.heroSub;
   document.getElementById('heroTitle').innerHTML = t.heroTitle;
   document.getElementById('heroHint').innerHTML  = t.heroHint + (isTouch ? t.hintTouch : t.hintMouse);
@@ -508,57 +660,133 @@ function renderHero() {
 function renderCards() {
   const grid = document.getElementById('grid');
   grid.innerHTML = '';
+  const t = i18n;
+
   letters.forEach((l) => {
     const card = document.createElement('div');
-    card.className = 'card';
+    const locked = l.id === 'birthday' && !isBirthdayUnlocked();
+    card.className = 'card' + (locked ? ' locked-card' : '');
+
+    const lockBadge     = locked ? `<div class="lock-badge">🔒</div>` : '';
+    const lockCountdown = locked
+      ? `<div class="locked-countdown">${t.lockedUntil}<br>${t.lockedDays(daysUntilUnlock())}</div>`
+      : '';
+
     card.innerHTML = `
       <div class="card-inner">
-        <div class="card-front">
+        <div class="card-front${locked ? ' locked-front' : ''}">
+          ${lockBadge}
           <div class="envelope-wrap">
-            <div class="envelope-icon">💌</div>
+            <div class="envelope-icon">${locked ? '🔒' : '💌'}</div>
             <div class="wax-seal">${l.seal}</div>
           </div>
           <div class="card-label-open">${l.emoji}</div>
-          <div class="card-label">${l.front[currentLang]}</div>
+          <div class="card-label">${l.front}</div>
+          ${lockCountdown}
         </div>
         <div class="card-back">
           <div class="letter-emoji">${l.topEmoji}</div>
-          <p class="letter-text">${l.text[currentLang]}</p>
-          <div class="letter-sign">${l.sign[currentLang]}</div>
+          <p class="letter-text">${l.text}</p>
+          <div class="letter-sign">${l.sign}</div>
         </div>
       </div>`;
 
-    if (isTouch) {
+    if (locked) {
+      // Still sealed — a little shake instead of opening, no peeking allowed.
+      card.addEventListener('click', () => {
+        card.classList.add('shake');
+        setTimeout(() => card.classList.remove('shake'), 500);
+      });
+    } else if (isTouch) {
       card.addEventListener('click', () => {
         const wasOpen = card.classList.contains('open');
         card.classList.toggle('open', !wasOpen);
         if (!wasOpen) spawnSparkles(card);
+        else if (l.id === 'birthday') handleBirthdayClose();
       });
     } else {
       card.addEventListener('mouseenter', () => card.classList.add('open'));
-      card.addEventListener('mouseleave', () => card.classList.remove('open'));
+      card.addEventListener('mouseleave', () => {
+        const wasOpen = card.classList.contains('open');
+        card.classList.remove('open');
+        if (wasOpen && l.id === 'birthday') handleBirthdayClose();
+      });
     }
 
     grid.appendChild(card);
   });
 }
 
-/* ── Language switch ──────────────────────────────── */
-function setLang(lang) {
-  currentLang = lang;
-  document.documentElement.lang = lang;
-  document.querySelectorAll('#langPill .toggle-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.lang === lang);
+/* ── Memories tab & popup ─────────────────────────── */
+function renderMemories() {
+  const t = i18n;
+  document.getElementById('memSub').innerHTML        = t.memSub;
+  document.getElementById('memTitle').innerHTML      = t.memTitle;
+  document.getElementById('memHint').textContent     = t.memHint;
+  document.getElementById('memFooterText').textContent = t.memFooter;
+
+  const grid = document.getElementById('memoriesGrid');
+  grid.innerHTML = '';
+  memories.forEach((m) => {
+    const card = document.createElement('div');
+    card.className = 'memory-card';
+    card.innerHTML = `
+      <div class="memory-photo">
+        ${m.img
+          ? `<img src="${m.img}" alt="">`
+          : `<div class="memory-placeholder"><span class="ph-icon">📷</span><span class="ph-text">${t.phText}</span></div>`}
+      </div>
+      <p class="memory-caption">${m.caption}</p>
+      ${m.date ? `<p class="memory-date">${m.date}</p>` : ''}`;
+    grid.appendChild(card);
   });
-  renderHero();
-  renderCards();
 }
 
-/* ── Theme switch ─────────────────────────────────── */
-function toggleTheme() {
-  currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-  document.documentElement.setAttribute('data-theme', currentTheme);
-  document.getElementById('themeBtn').textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+function revealTabBar(animate) {
+  const bar = document.getElementById('tabBar');
+  bar.style.display = 'flex';
+  if (animate) {
+    bar.classList.add('tab-reveal');
+    setTimeout(() => bar.classList.remove('tab-reveal'), 700);
+  }
+  renderMemories();
+}
+
+function handleBirthdayClose() {
+  if (!isBirthdayUnlocked()) return;
+  if (localStorage.getItem(MEM_KEY)) return; // already revealed before — no repeat popup
+  localStorage.setItem(MEM_KEY, '1');
+  revealTabBar(true);
+  showPopup();
+}
+
+function showPopup() {
+  const t = i18n;
+  document.getElementById('popupTitle').textContent = t.popupTitle;
+  document.getElementById('popupText').textContent  = t.popupText;
+  document.getElementById('popupBtn').textContent   = t.popupBtn;
+  document.getElementById('popupOverlay').style.display = 'flex';
+}
+
+function goToMemoriesFromPopup() {
+  document.getElementById('popupOverlay').style.display = 'none';
+  showMemories();
+}
+
+function showMemories() {
+  document.getElementById('mainView').style.display     = 'none';
+  document.getElementById('memoriesView').style.display  = 'block';
+  document.getElementById('tabLetters').classList.remove('active');
+  document.getElementById('tabMemories').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showMain() {
+  document.getElementById('memoriesView').style.display = 'none';
+  document.getElementById('mainView').style.display     = 'block';
+  document.getElementById('tabMemories').classList.remove('active');
+  document.getElementById('tabLetters').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 /* ── Sparkles ─────────────────────────────────────── */
@@ -603,6 +831,10 @@ setInterval(makePetal, 1700);
 /* ── Init ─────────────────────────────────────────── */
 renderHero();
 renderCards();
+if (localStorage.getItem(MEM_KEY)) {
+  revealTabBar(false); // already unlocked on a previous visit — show without the reveal animation
+}
+if (TEST_MODE) showTestBanner();
 </script>
 </body>
 </html>
